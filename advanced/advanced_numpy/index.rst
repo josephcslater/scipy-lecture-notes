@@ -96,7 +96,7 @@ Block of memory
 >>> x = np.array([1, 2, 3], dtype=np.int32)
 >>> x.data      # doctest: +ELLIPSIS
 <... at ...>
->>> str(x.data)  # doctest: +SKIP
+>>> bytes(x.data)  # doctest: +SKIP
 '\x01\x00\x00\x00\x02\x00\x00\x00\x03\x00\x00\x00'
 
 Memory address of the data:
@@ -682,7 +682,7 @@ array([1, 3], dtype=int16)
        </div>
 
 
-.. _broadcasting:
+.. _broadcasting_advanced:
 
 Broadcasting
 ^^^^^^^^^^^^
@@ -1468,7 +1468,11 @@ The masked array package also contains domain-aware functions::
     >>> plt.plot(year, populations, 'o-')   # doctest: +ELLIPSIS
     [<matplotlib.lines.Line2D object at ...>, ...]
 
-   .. plot:: pyplots/numpy_intro_8.py
+.. image:: auto_examples/images/sphx_glr_plot_maskedstats_001.png
+   :width: 50%
+   :target: auto_examples/plot_maskedstats.html
+   :align: center
+
 
 :class:`recarray`: purely convenience
 ---------------------------------------

@@ -6,6 +6,7 @@ Comparison of optimizers on various problems.
 """
 import functools
 import pickle
+import sys
 
 import numpy as np
 from scipy import optimize
@@ -15,30 +16,31 @@ from cost_functions import mk_quad, mk_gauss, rosenbrock,\
     rosenbrock_prime, rosenbrock_hessian, LoggingFunction, \
     CountingFunction
 
-def my_partial(function, **kwargs):
+def my_partial(**kwargs):
+    function = optimize.minimize
     f = functools.partial(function, **kwargs)
     functools.update_wrapper(f, function)
     return f
 
 methods = {
-    'Nelder-mead':          my_partial(optimize.fmin,
-                                        ftol=1e-12, maxiter=5e3,
-                                        xtol=1e-7, maxfun=1e6),
-    'Powell':               my_partial(optimize.fmin_powell,
-                                        ftol=1e-9, maxiter=5e3,
-                                        maxfun=1e7),
-    'BFGS':                 my_partial(optimize.fmin_bfgs,
-                                        gtol=1e-9, maxiter=5e3),
-    'Newton':               my_partial(optimize.fmin_ncg,
-                                        avextol=1e-7, maxiter=5e3),
-    'Conjugate gradient':   my_partial(optimize.fmin_cg,
-                                        gtol=1e-7, maxiter=5e3),
-    'L-BFGS':               my_partial(optimize.fmin_l_bfgs_b,
-                                        approx_grad=1, factr=10.0,
-                                        pgtol=1e-8, maxfun=1e7),
-    "L-BFGS w f'":               my_partial(optimize.fmin_l_bfgs_b,
-                                        factr=10.0,
-                                        pgtol=1e-8, maxfun=1e7),
+    'Nelder-mead':          my_partial(method = "Nelder-Mead", options = {
+                                        "fatol": 1e-12, "maxiter": 5e3,
+                                        "xatol": 1e-7, "maxfev": 1e6 }),
+    'Powell':               my_partial(method = "Powell", options = {
+                                        "ftol": 1e-9, "maxiter": 5e3,
+                                        "maxfev": 1e7 }),
+    'BFGS':                 my_partial(method = "BFGS", options = {
+                                        "gtol": 1e-9, "maxiter": 5e3 }),
+    'Newton':               my_partial(method = "Newton-CG", options = {
+                                        "xtol": 1e-7, "maxiter": 5e3 }),
+    'Conjugate gradient':   my_partial(method = "CG", options = {
+                                        "gtol": 1e-7, "maxiter": 5e3 }),
+    'L-BFGS':               my_partial(method = "L-BFGS-B", options = {
+                                        "ftol": 10.0,
+                                        "gtol": 1e-8, "maxfun": 1e7 }),
+    "L-BFGS w f'":          my_partial(method = "L-BFGS-B", options = {
+                                        "ftol": 10.0,
+                                        "gtol": 1e-8, "maxfun": 1e7 }),
 }
 
 ###############################################################################
@@ -58,7 +60,7 @@ def bencher_gradient(cost_name, ndim, method_name, x0):
     method = methods[method_name]
     f_prime = CountingFunction(cost_function_prime)
     f = LoggingFunction(cost_function, counter=f_prime.counter)
-    method(f, x0, f_prime)
+    method(f, x0, jac=f_prime)
     this_costs = np.array(f.all_f_i)
     return this_costs, np.array(f.counts)
 
@@ -70,7 +72,7 @@ def bencher_hessian(cost_name, ndim, method_name, x0):
     f_prime = CountingFunction(cost_function_prime)
     hessian = CountingFunction(hessian, counter=f_prime.counter)
     f = LoggingFunction(cost_function, counter=f_prime.counter)
-    method(f, x0, f_prime, fhess=hessian)
+    method(f, x0, jac=f_prime, hess=hessian)
     this_costs = np.array(f.all_f_i)
     return this_costs, np.array(f.counts)
 
@@ -94,20 +96,20 @@ def mk_costs(ndim=2):
 # Compare methods without gradient
 mem = Memory('.', verbose=3)
 
-if 1:
+if True:
     gradient_less_benchs = dict()
 
     for ndim in (2, 8, 32, 128):
         this_dim_benchs = dict()
         costs, starting_points = mk_costs(ndim)
-        for cost_name, cost_function in costs.iteritems():
+        for cost_name, cost_function in costs.items():
             # We don't need the derivative or the hessian
             cost_function = cost_function[0]
             function_bench = dict()
             for x0 in starting_points:
                 all_bench = list()
                 # Bench gradient-less
-                for method_name, method in methods.iteritems():
+                for method_name, method in methods.items():
                     if method_name in ('Newton', "L-BFGS w f'"):
                         continue
                     this_bench = function_bench.get(method_name, list())
@@ -124,7 +126,7 @@ if 1:
                     function_bench[method_name] = this_bench
 
                 # Bench with gradients
-                for method_name, method in methods.iteritems():
+                for method_name, method in methods.items():
                     if method_name in ('Newton', 'Powell', 'Nelder-mead',
                                        "L-BFGS"):
                         continue
@@ -149,7 +151,7 @@ if 1:
                 # Bench Newton with Hessian
                 method_name = 'Newton'
                 this_bench = function_bench.get(method_name, list())
-                this_costs = mem.cache(bencher_hessian)(cost_name, ndim,
+                this_costs, this_counts = mem.cache(bencher_hessian)(cost_name, ndim,
                                                 method_name, x0)
                 if np.all(this_costs > .25*ndim**2*1e-9):
                     convergence = 2*len(this_costs)
@@ -167,10 +169,9 @@ if 1:
                     function_bench[method_name][-1] /= x0_mean
             this_dim_benchs[cost_name] = function_bench
         gradient_less_benchs[ndim] = this_dim_benchs
-        print 80*'_'
-        print 'Done cost %s, ndim %s' % (cost_name, ndim)
-        print 80*'_'
+        print(80*'_')
+        print('Done cost %s, ndim %s' % (cost_name, ndim))
+        print(80*'_')
 
-    pickle.dump(gradient_less_benchs, file('compare_optimizers.pkl', 'w'))
-
-
+    pickle.dump(gradient_less_benchs,
+                open('compare_optimizers_py%s.pkl' % sys.version_info[0], 'wb'))

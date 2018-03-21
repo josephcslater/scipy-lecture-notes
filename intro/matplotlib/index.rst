@@ -21,35 +21,33 @@ Introduction
 
 .. tip::
 
-    `Matplotlib <http://matplotlib.org/>`__ is probably the single most
-    used Python package for 2D-graphics. It provides both a very quick
+    `Matplotlib <http://matplotlib.org/>`__ is probably the most
+    used Python package for 2D-graphics. It provides both a quick
     way to visualize data from Python and publication-quality figures in
     many formats.  We are going to explore matplotlib in interactive mode
     covering most common cases.
 
-IPython and the matplotlib mode
---------------------------------
+IPython, Jupyter, and matplotlib modes
+---------------------------------------
 
 .. tip::
 
-    `IPython <http://ipython.org/>`_ is an enhanced interactive Python
-    shell that has lots of interesting features including named inputs
-    and outputs, access to shell commands, improved debugging and many
-    more. It is central to the scientific-computing workflow in Python
-    for its use in combination with Matplotlib:
+    The `Jupyter <http://jupyter.org>`_ notebook and the
+    `IPython <http://ipython.org/>`_ enhanced interactive Python, are
+    tuned for the scientific-computing workflow in Python,
+    in combination with Matplotlib:
 
-    For interactive matplotlib sessions with Matlab/Mathematica-like
-    functionality, we use IPython with it's special Matplotlib mode that
-    enables non-blocking plotting.
+For interactive matplotlib sessions, turn on the **matplotlib mode**
 
 :IPython console:
 
-  When using the IPython console, we start it with the command line
-  argument ``--matplotlib`` (``-pylab`` in very old versions). 
+  When using the IPython console, use::
 
-:IPython notebook:
+    In [1]: %matplotlib
 
-  In the IPython notebook, we insert, **at the beginning of the
+:Jupyter notebook:
+
+  In the notebook, insert, **at the beginning of the
   notebook** the following `magic
   <http://ipython.readthedocs.org/en/stable/interactive/magics.html>`_::
 
@@ -138,6 +136,8 @@ Plotting with default settings
     color and style, axes, axis and grid properties, text and font
     properties and so on.
 
+|clear-floats|
+
 ::
 
    import numpy as np
@@ -173,11 +173,13 @@ that influence the appearance of the plot.
     now you can interactively play with the values to explore their
     affect (see `Line properties`_ and `Line styles`_ below).
 
+|clear-floats|
+
 ::
 
    import numpy as np
    import matplotlib.pyplot as plt
-   
+
    # Create a figure of size 8x6 inches, 80 dots per inch
    plt.figure(figsize=(8, 6), dpi=80)
 
@@ -231,6 +233,8 @@ Changing colors and line widths
     slighty thicker line for both of them. We'll also slightly alter the figure
     size to make it more horizontal.
 
+|clear-floats|
+
 ::
 
    ...
@@ -257,6 +261,8 @@ Setting limits
 
     Current limits of the figure are a bit too tight and we want to make
     some space in order to clearly see all data points.
+
+|clear-floats|
 
 ::
 
@@ -287,6 +293,8 @@ Setting ticks
     Current ticks are not ideal because they do not show the interesting values
     (+/-π,+/-π/2) for sine and cosine. We'll change them such that they show
     only these values.
+
+|clear-floats|
 
 ::
 
@@ -322,6 +330,8 @@ Setting tick labels
     explicit. When we set tick values, we can also provide a
     corresponding label in the second argument list. Note that we'll use
     latex to allow for nice rendering of the label.
+
+|clear-floats|
 
 ::
 
@@ -360,6 +370,8 @@ Moving spines
     by setting their color to none and we'll move the bottom and left
     ones to coordinate 0 in data space coordinates.
 
+|clear-floats|
+
 ::
 
    ...
@@ -395,6 +407,8 @@ Adding a legend
     adding the keyword argument label (that will be used in the legend
     box) to the plot commands.
 
+|clear-floats|
+
 ::
 
    ...
@@ -427,6 +441,8 @@ Annotate some points
     cosine. We'll first draw a marker on the curve as well as a straight
     dotted line. Then, we'll use the annotate command to display some
     text with an arrow.
+
+|clear-floats|
 
 ::
 
@@ -472,6 +488,8 @@ Devil is in the details
     properties such that they'll be rendered on a semi-transparent white
     background. This will allow us to see both the data and the labels.
 
+|clear-floats|
+
 ::
 
    ...
@@ -497,8 +515,8 @@ Within this figure there can be **"subplots"**.
     regular grid, axes allows free placement within the figure. Both can be
     useful depending on your intention. We've already worked with figures and
     subplots without explicitly calling them.  When we call plot, matplotlib
-    calls ``gca()`` to get the current axes and gca in turn calls ``gcf()`` to
-    get the current figure. If there is none it calls ``figure()`` to make one,
+    calls :func:`~matplotlib.pyplot.gca` to get the current axes and gca in turn calls :func:`~matplotlib.pyplot.gcf` to
+    get the current figure. If there is none it calls :func:`~matplotlib.pyplot.figure` to make one,
     strictly speaking, to make a ``subplot(111)``. Let's look at the details.
 
 Figures
@@ -622,38 +640,38 @@ Other Types of Plots: examples and exercises
 =============================================
 
 .. image:: auto_examples/pretty_plots/images/sphx_glr_plot_plot_ext_001.png
-   :scale: 39                         
-   :target: `Regular Plot             s`_
+   :scale: 39
+   :target: `Regular Plots`_
 .. image:: auto_examples/pretty_plots/images/sphx_glr_plot_scatter_ext_001.png
-   :scale: 39                         
-   :target: `Scatter Plot             s`_
+   :scale: 39
+   :target: `Scatter Plots`_
 .. image:: auto_examples/pretty_plots/images/sphx_glr_plot_bar_ext_001.png
-   :scale: 39                         
-   :target: `Bar Plots`_              
+   :scale: 39
+   :target: `Bar Plots`_
 .. image:: auto_examples/pretty_plots/images/sphx_glr_plot_contour_ext_001.png
-   :scale: 39                         
-   :target: `Contour Plot             s`_
+   :scale: 39
+   :target: `Contour Plots`_
 .. image:: auto_examples/pretty_plots/images/sphx_glr_plot_imshow_ext_001.png
-   :scale: 39                         
-   :target: `Imshow`_                 
+   :scale: 39
+   :target: `Imshow`_
 .. image:: auto_examples/pretty_plots/images/sphx_glr_plot_quiver_ext_001.png
-   :scale: 39                         
-   :target: `Quiver Plots             `_
+   :scale: 39
+   :target: `Quiver Plots`_
 .. image:: auto_examples/pretty_plots/images/sphx_glr_plot_pie_ext_001.png
-   :scale: 39                         
-   :target: `Pie Charts`_             
+   :scale: 39
+   :target: `Pie Charts`_
 .. image:: auto_examples/pretty_plots/images/sphx_glr_plot_grid_ext_001.png
-   :scale: 39                         
-   :target: `Grids`_                  
+   :scale: 39
+   :target: `Grids`_
 .. image:: auto_examples/pretty_plots/images/sphx_glr_plot_multiplot_ext_001.png
-   :scale: 39                         
+   :scale: 39
    :target: `Multi Plots`             _
 .. image:: auto_examples/pretty_plots/images/sphx_glr_plot_polar_ext_001.png
-   :scale: 39                         
-   :target: `Polar Axis`_             
+   :scale: 39
+   :target: `Polar Axis`_
 .. image:: auto_examples/pretty_plots/images/sphx_glr_plot_plot3d_ext_001.png
-   :scale: 39                         
-   :target: `3D Plots`_               
+   :scale: 39
+   :target: `3D Plots`_
 .. image:: auto_examples/pretty_plots/images/sphx_glr_plot_text_ext_001.png
    :scale: 39
    :target: `Text`_
@@ -667,14 +685,17 @@ Regular Plots
    :scale: 35
    :target: auto_examples/plot_plot.html
 
+Starting from the code below, try to reproduce the graphic taking
+care of filled areas:
+
 .. hint::
 
    You need to use the `fill_between
    <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.fill_between>`_
    command.
 
-Starting from the code below, try to reproduce the graphic on the right taking
-care of filled areas::
+
+::
 
    n = 256
    X = np.linspace(-np.pi, np.pi, n, endpoint=True)
@@ -694,13 +715,13 @@ Scatter Plots
    :scale: 35
    :target: auto_examples/plot_scatter.html
 
+Starting from the code below, try to reproduce the graphic taking
+care of marker size, color and transparency.
+
 .. hint::
 
    Color is given by angle of (X,Y).
 
-
-Starting from the code below, try to reproduce the graphic on the right taking
-care of marker size, color and transparency.
 
 ::
 
@@ -721,13 +742,14 @@ Bar Plots
    :scale: 35
    :target: auto_examples/plot_bar.html
 
+Starting from the code below, try to reproduce the graphic by
+adding labels for red bars.
+
 .. hint::
 
    You need to take care of text alignment.
 
-
-Starting from the code below, try to reproduce the graphic on the right by
-adding labels for red bars.
+|clear-floats|
 
 ::
 
@@ -756,14 +778,14 @@ Contour Plots
    :target: auto_examples/plot_contour.html
 
 
+Starting from the code below, try to reproduce the graphic taking
+care of the colormap (see `Colormaps`_ below).
+
 .. hint::
 
    You need to use the `clabel
    <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.clabel>`_
    command.
-
-Starting from the code below, try to reproduce the graphic on the right taking
-care of the colormap (see `Colormaps`_ below).
 
 ::
 
@@ -791,15 +813,15 @@ Imshow
    :target: auto_examples/plot_imshow.html
 
 
+Starting from the code below, try to reproduce the graphic taking
+care of colormap, image interpolation and origin.
+
 .. hint::
 
    You need to take care of the ``origin`` of the image in the imshow command and
    use a `colorbar
    <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.colorbar>`_
 
-
-Starting from the code below, try to reproduce the graphic on the right taking
-care of colormap, image interpolation and origin.
 
 ::
 
@@ -824,12 +846,12 @@ Pie Charts
    :target: auto_examples/plot_pie.html
 
 
+Starting from the code below, try to reproduce the graphic taking
+care of colors and slices size.
+
 .. hint::
 
    You need to modify Z.
-
-Starting from the code below, try to reproduce the graphic on the right taking
-care of colors and slices size.
 
 ::
 
@@ -849,12 +871,12 @@ Quiver Plots
    :target: auto_examples/plot_quiver.html
 
 
+Starting from the code below, try to reproduce the graphic taking
+care of colors and orientations.
+
 .. hint::
 
    You need to draw arrows twice.
-
-Starting from the code above, try to reproduce the graphic on the right taking
-care of colors and orientations.
 
 ::
 
@@ -874,7 +896,7 @@ Grids
    :target: auto_examples/plot_grid.html
 
 
-Starting from the code below, try to reproduce the graphic on the right taking
+Starting from the code below, try to reproduce the graphic taking
 care of line styles.
 
 ::
@@ -897,12 +919,12 @@ Multi Plots
    :scale: 35
    :target: auto_examples/plot_multiplot.html
 
+Starting from the code below, try to reproduce the graphic.
+
 .. hint::
 
    You can use several subplots with different partition.
 
-
-Starting from the code below, try to reproduce the graphic on the right.
 
 ::
 
@@ -926,8 +948,8 @@ Polar Axis
 
    You only need to modify the ``axes`` line
 
+Starting from the code below, try to reproduce the graphic.
 
-Starting from the code below, try to reproduce the graphic on the right.
 
 ::
 
@@ -940,7 +962,7 @@ Starting from the code below, try to reproduce the graphic on the right.
    bars = plt.bar(theta, radii, width=width, bottom=0.0)
 
    for r, bar in zip(radii, bars):
-       bar.set_facecolor(cm.jet(r / 10.))
+       bar.set_facecolor(plt.cm.jet(r / 10.))
        bar.set_alpha(0.5)
 
 Click on figure for solution.
@@ -954,6 +976,7 @@ Click on figure for solution.
    :scale: 35
    :target: auto_examples/plot_plot3d.html
 
+Starting from the code below, try to reproduce the graphic.
 
 .. hint::
 
@@ -961,7 +984,6 @@ Click on figure for solution.
    <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.contourf>`_
 
 
-Starting from the code below, try to reproduce the graphic on the right.
 
 ::
 
@@ -991,12 +1013,13 @@ Text
    :target: auto_examples/plot_text.html
 
 
+Try to do the same from scratch !
+
 .. hint::
 
    Have a look at the `matplotlib logo
    <http://matplotlib.org/examples/api/logo2.html>`_.
 
-Try to do the same from scratch !
 
 Click on figure for solution.
 
@@ -1078,17 +1101,19 @@ Tutorials
 Matplotlib documentation
 ------------------------
 
-* `User guide <http://matplotlib.org/users/index.html>`_
+.. hlist::
 
-* `FAQ <http://matplotlib.org/faq/index.html>`_
+  * `User guide <http://matplotlib.org/users/index.html>`_
 
-  - Installation
-  - Usage
-  - How-To
-  - Troubleshooting
-  - Environment Variables
+  * `FAQ <http://matplotlib.org/faq/index.html>`_
 
-* `Screenshots <http://matplotlib.org/users/screenshots.html>`_
+    - Installation
+    - Usage
+    - How-To
+    - Troubleshooting
+    - Environment Variables
+
+  * `Screenshots <http://matplotlib.org/users/screenshots.html>`_
 
 
 Code documentation
@@ -1230,8 +1255,7 @@ Colormaps
 All colormaps can be reversed by appending ``_r``. For instance, ``gray_r`` is
 the reverse of ``gray``.
 
-If you want to know more about colormaps, checks `Documenting the matplotlib
-colormaps <intro/matplotlib/matplotlib.rst>`_.
+If you want to know more about colormaps, check the `documentation on Colormaps in matplotlib <https://matplotlib.org/tutorials/colors/colormaps.html>`_.
 
 .. image:: auto_examples/options/images/sphx_glr_plot_colormaps_001.png
    :scale: 80
@@ -1240,6 +1264,5 @@ colormaps <intro/matplotlib/matplotlib.rst>`_.
 Full code examples
 ==================
 
-.. toctree::
-
-    auto_examples/index.rst
+.. include::  auto_examples/index.rst
+    :start-line: 1

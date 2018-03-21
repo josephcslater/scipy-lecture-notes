@@ -22,23 +22,30 @@ Statistics in Python
 
    * Standard scientific Python environment (numpy, scipy, matplotlib)
 
-   * `Pandas <http://pandas.pydata.org/>`_
+   * `Pandas <http://pandas.pydata.org/>`__
 
-   * `Statsmodels <http://statsmodels.sourceforge.net/>`_
+   * `Statsmodels <http://www.statsmodels.org/>`__
 
-   * `Seaborn <http://stanford.edu/~mwaskom/software/seaborn/>`_
+   * `Seaborn <http://seaborn.pydata.org>`__
 
    To install Python and these dependencies, we recommend that you
    download `Anaconda Python <http://continuum.io/downloads>`_ or
    `Enthought Canopy <https://store.enthought.com/>`_, or preferably use
    the package manager if you are under Ubuntu or other linux.
 
-.. seealso:: **Bayesian statistics in Python**
-
+.. seealso::
+   
+ * **Bayesian statistics in Python**:
    This chapter does not cover tools for Bayesian statistics. Of
    particular interest for Bayesian modelling is `PyMC
    <http://pymc-devs.github.io/pymc>`_, which implements a probabilistic
    programming language in Python.
+
+ * **Read a statistics book**:
+   The `Think stats <http://greenteapress.com/wp/think-stats-2e>`_ book is
+   available as free PDF or in print and is a great introduction to
+   statistics.
+
 
 |
 
@@ -97,7 +104,7 @@ The pandas data-frame
 
     We will store and manipulate this data in a
     :class:`pandas.DataFrame`, from the `pandas
-    <http://pandas.pydata.org>`_ module. It is the Python equivalent of
+    <http://pandas.pydata.org>`__ module. It is the Python equivalent of
     the spreadsheet table. It is different from a 2D ``numpy`` array as it
     has named columns, can contain a mixture of different data types by
     column, and has elaborate selection and pivotal mechanisms.
@@ -117,11 +124,11 @@ data are a mixture of numerical and categorical values::
     >>> data = pandas.read_csv('examples/brain_size.csv', sep=';', na_values=".")
     >>> data  # doctest: +ELLIPSIS
         Unnamed: 0  Gender  FSIQ  VIQ  PIQ  Weight  Height  MRI_Count
-    0            1  Female   133  132  124     118    64.5     816932
+    0            1  Female   133  132  124   118.0    64.5     816932
     1            2    Male   140  150  124     NaN    72.5    1001121
-    2            3    Male   139  123  150     143    73.3    1038437
-    3            4    Male   133  129  128     172    68.8     965353
-    4            5  Female   137  132  134     147    65.0     951545
+    2            3    Male   139  123  150   143.0    73.3    1038437
+    3            4    Male   133  129  128   172.0    68.8     965353
+    4            5  Female   137  132  134   147.0    65.0     951545
     ...
 
 .. warning:: **Missing values**
@@ -158,9 +165,9 @@ We can expose them as a :class:`pandas.DataFrame`::
 
 |
 
-**Other inputs**: `pandas <http://pandas.pydata.org>`_ can input data from
+**Other inputs**: `pandas <http://pandas.pydata.org>`__ can input data from
 SQL, excel files, or other formats. See the `pandas documentation
-<http://pandas.pydata.org>`_.
+<http://pandas.pydata.org>`__.
 
 |
 
@@ -319,7 +326,7 @@ and the `p-value <https://en.wikipedia.org/wiki/P-value>`_ (see the
 function's help)::
 
     >>> stats.ttest_1samp(data['VIQ'], 0)   # doctest: +ELLIPSIS
-    (...30.088099970..., 1.32891964...e-28)
+    Ttest_1sampResult(statistic=30.088099970..., pvalue=1.32891964...e-28)
 
 .. tip::
    
@@ -336,7 +343,7 @@ with :func:`scipy.stats.ttest_ind`::
     >>> female_viq = data[data['Gender'] == 'Female']['VIQ']
     >>> male_viq = data[data['Gender'] == 'Male']['VIQ']
     >>> stats.ttest_ind(female_viq, male_viq)   # doctest: +ELLIPSIS
-    (...-0.77261617232..., 0.4445287677858...)
+    Ttest_indResult(statistic=-0.77261617232..., pvalue=0.4445287677858...)
 
 Paired tests: repeated measurements on the same indivuals
 ----------------------------------------------------------
@@ -350,7 +357,7 @@ PIQ, VIQ, and FSIQ give 3 measures of IQ. Let us test if FISQ and PIQ are
 significantly different. We can use a 2 sample test::
 
     >>> stats.ttest_ind(data['FSIQ'], data['PIQ'])   # doctest: +ELLIPSIS
-    (...0.46563759638..., 0.64277250...)
+    Ttest_indResult(statistic=0.46563759638..., pvalue=0.64277250...)
 
 The problem with this approach is that it forgets that there are links
 between observations: FSIQ and PIQ are measured on the same individuals.
@@ -359,7 +366,7 @@ can be removed, using a "paired test", or `"repeated measures test"
 <https://en.wikipedia.org/wiki/Repeated_measures_design>`_::
 
     >>> stats.ttest_rel(data['FSIQ'], data['PIQ'])   # doctest: +ELLIPSIS
-    (...1.784201940..., 0.082172638183...)
+    Ttest_relResult(statistic=1.784201940..., pvalue=0.082172638183...)
 
 .. image:: auto_examples/images/sphx_glr_plot_paired_boxplots_002.png
    :target: auto_examples/plot_pandas.html
@@ -369,7 +376,7 @@ can be removed, using a "paired test", or `"repeated measures test"
 This is equivalent to a 1-sample test on the difference::
 
     >>> stats.ttest_1samp(data['FSIQ'] - data['PIQ'], 0)   # doctest: +ELLIPSIS
-    (...1.784201940..., 0.082172638...)
+    Ttest_1sampResult(statistic=1.784201940..., pvalue=0.082172638...)
 
 |
 
@@ -379,7 +386,7 @@ can use a `Wilcoxon signed-rank test
 this assumption::
 
     >>> stats.wilcoxon(data['FSIQ'], data['PIQ'])   # doctest: +ELLIPSIS
-    (274.5, 0.106594927...)
+    WilcoxonResult(statistic=274.5, pvalue=0.106594927...)
 
 .. note::
 
@@ -417,7 +424,7 @@ A simple linear regression
 Given two set of observations, `x` and `y`, we want to test the
 hypothesis that `y` is a linear function of `x`. In other terms:
 
-    :math:`y = x * coef + intercept + e`
+    :math:`y = x * \textit{coef} + \textit{intercept} + e`
 
 where `e` is observation noise. We will use the `statsmodels
 <http://statsmodels.sourceforge.net/>`_ module to:
@@ -465,6 +472,7 @@ We can inspect the various statistics derived from the fit::
     No. Observations:                  20   AIC:                             120.0
     Df Residuals:                      18   BIC:                             122.0
     Df Model:                           1                                         
+    Covariance Type:            nonrobust
     ==========================...
                      coef    std err          t      P>|t|      [95.0% Conf. Int.]
     ------------------------------------------...
@@ -476,6 +484,9 @@ We can inspect the various statistics derived from the fit::
     Skew:                          -0.058   Prob(JB):                        0.851
     Kurtosis:                       2.390   Cond. No.                         3.03
     ==========================...
+    <BLANKLINE>
+    Warnings:
+    [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 
 
 .. topic:: Terminology:
@@ -520,6 +531,7 @@ model::
      No. Observations:                  40   AIC:                             368.8
      Df Residuals:                      38   BIC:                             372.2
      Df Model:                           1                                      
+     Covariance Type:            nonrobust
      ==========================...
                        coef    std err        t      P>|t|      [95.0% Conf. Int.]
      -----------------------------------------------------------------------...
@@ -531,6 +543,9 @@ model::
      Skew:                           0.010   Prob(JB):                        0.157
      Kurtosis:                       1.510   Cond. No.                         2.62
      ==========================...
+     <BLANKLINE>
+     Warnings:
+     [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 
 .. topic:: **Tips on specifying model**
  
@@ -593,7 +608,7 @@ model::
     previous t-test::
 
      >>> stats.ttest_ind(data['FSIQ'], data['PIQ'])   # doctest: +ELLIPSIS
-     (...0.46563759638..., 0.64277250...)
+     Ttest_indResult(statistic=0.46563759638..., pvalue=0.64277250...)
 
 
 Multiple Regression: including multiple factors
@@ -644,6 +659,7 @@ Such a model can be seen in 3D as fitting a plane to a cloud of (`x`,
     No. Observations:                 150   AIC:                             84.37
     Df Residuals:                     146   BIC:                             96.41
     Df Model:                           3                                     
+    Covariance Type:            nonrobust
     ==========================...
                              coef    std err          t     P>|t|  [95.0% Conf. Int.]
     ------------------------------------------...
@@ -657,6 +673,9 @@ Such a model can be seen in 3D as fitting a plane to a cloud of (`x`,
     Skew:                          -0.082   Prob(JB):                        0.236
     Kurtosis:                       3.659   Cond. No.                         54.0
     ==========================...
+    <BLANKLINE>
+    Warnings:
+    [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 
 |
 
@@ -673,8 +692,8 @@ write a **vector of 'contrast'** on the parameters estimated: we want to
 test ``"name[T.versicolor] - name[T.virginica]"``, with an `F-test
 <https://en.wikipedia.org/wiki/F-test>`_::
 
-    >>> print(model.f_test([0, 1, -1, 0]))
-    <F test: F=array([[ 3.24533535]]), p=[[ 0.07369059]], df_denom=146, df_num=1>
+    >>> print(model.f_test([0, 1, -1, 0]))  # doctest: +ELLIPSIS
+    <F test: F=array([[ 3.24533535]]), p=0.07369..., df_denom=146, df_num=1>
 
 Is this difference significant?
 
@@ -761,15 +780,19 @@ Categorical variables can be plotted as the hue::
 lmplot: plotting a univariate regression
 -----------------------------------------
 
+.. image:: auto_examples/images/sphx_glr_plot_wage_data_005.png
+   :target: auto_examples/plot_wage_data.html
+   :align: right
+   :scale: 60
+
 A regression capturing the relation between one variable and another, eg
 wage and eduction, can be plotted using :func:`seaborn.lmplot`::
 
     >>> seaborn.lmplot(y='WAGE', x='EDUCATION', data=data)  # doctest: +SKIP
 
-.. image:: auto_examples/images/sphx_glr_plot_wage_data_005.png
-   :target: auto_examples/plot_wage_data.html
-   :align: center
-   :scale: 60
+.. raw:: html
+
+   <div style="clear: both"></div>
 
 .. topic:: **Robust regression**
 
@@ -794,15 +817,15 @@ Testing for interactions
 .. image:: auto_examples/images/sphx_glr_plot_wage_education_gender_001.png
    :target: auto_examples/plot_wage_education_gender.html
    :align: center
-   :scale: 60
+   :scale: 70
 
 Do wages increase more with education for males than females?
 
 .. tip::
 
     The plot above is made of two different fits. We need to formulate a
-    single model that tests for a variance of slope across the to
-    population. This is done via an `"interaction"
+    single model that tests for a variance of slope across the two
+    populations. This is done via an `"interaction"
     <http://statsmodels.sourceforge.net/devel/example_formulas.html#multiplicative-interactions>`_.
 
 
@@ -827,25 +850,26 @@ Can we conclude that education benefits males more than females?
 
 .. topic:: **Take home messages**
 
-   * Hypothesis testing and p-value give you the **significance** of an
-     effect / difference
+   * Hypothesis testing and p-values give you the **significance** of an
+     effect / difference.
 
    * **Formulas** (with categorical variables) enable you to express rich
-     links in your data
+     links in your data.
 
-   * **Visualizing** your data and simple model fits matters!
+   * **Visualizing** your data and fitting simple models give insight into the 
+     data.
 
    * **Conditionning** (adding factors that can explain all or part of
-     the variation) is important modeling aspect that changes the
+     the variation) is an important modeling aspect that changes the
      interpretation.
 
 |
 
-Full code examples
-===================
+.. include the gallery. Skip the first line to avoid the "orphan"
+   declaration
 
-.. toctree::
+.. include:: auto_examples/index.rst
+    :start-line: 1
 
-    auto_examples/index.rst
 
 

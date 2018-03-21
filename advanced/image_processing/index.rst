@@ -154,10 +154,10 @@ Draw contour lines::
 
     [:ref:`Python source code <example_plot_display_face.py>`]
 
-For fine inspection of intensity variations, use
+For smooth intensity variations, use ``interpolation='bilinear'``. For fine inspection of intensity variations, use
 ``interpolation='nearest'``::
 
-    >>> plt.imshow(f[320:340, 510:530], cmap=plt.cm.gray)        # doctest: +ELLIPSIS
+    >>> plt.imshow(f[320:340, 510:530], cmap=plt.cm.gray, interpolation='bilinear')        # doctest: +ELLIPSIS
     <matplotlib.image.AxesImage object at 0x...>
     >>> plt.imshow(f[320:340, 510:530], cmap=plt.cm.gray, interpolation='nearest')        # doctest: +ELLIPSIS
     <matplotlib.image.AxesImage object at 0x...>
@@ -169,6 +169,12 @@ For fine inspection of intensity variations, use
 .. only:: html
 
     [:ref:`Python source code <example_plot_interpolation_face.py>`]
+
+
+.. seealso::
+
+    More interpolation methods are in  `Matplotlib's examples <https://matplotlib.org/examples/images_contours_and_fields/interpolation_methods.html>`_.
+
 
 
 .. seealso:: 3-D visualization: Mayavi
@@ -272,7 +278,7 @@ Geometrical transformations
     >>> face = misc.face(gray=True)
     >>> lx, ly = face.shape
     >>> # Cropping
-    >>> crop_face = face[lx / 4: - lx / 4, ly / 4: - ly / 4]
+    >>> crop_face = face[lx // 4: - lx // 4, ly // 4: - ly // 4]
     >>> # up <-> down flip
     >>> flip_ud_face = np.flipud(face)
     >>> # rotation
@@ -749,7 +755,7 @@ Label connected components: ``ndimage.label``::
 
     >>> label_im, nb_labels = ndimage.label(mask)
     >>> nb_labels # how many regions?
-    16
+    28
     >>> plt.imshow(label_im)        # doctest: +ELLIPSIS
     <matplotlib.image.AxesImage object at 0x...>
 
@@ -867,7 +873,7 @@ One example with mathematical morphology: `granulometry
     >>>
     >>> def granulometry(data, sizes=None):
     ...     s = max(data.shape)
-    ...     if sizes == None:
+    ...     if sizes is None:
     ...         sizes = range(1, s/2, 2)
     ...     granulo = [ndimage.binary_opening(data, \
     ...         structure=disk_structure(n)).sum() for n in sizes]
@@ -894,6 +900,16 @@ One example with mathematical morphology: `granulometry
 .. only:: html
 
     [:ref:`Python source code <example_plot_granulo.py>`]
+
+
+Full code examples
+==================
+
+.. include the gallery. Skip the first line to avoid the "orphan"
+   declaration
+
+.. include:: auto_examples/index.rst
+    :start-line: 1
 
 |
 

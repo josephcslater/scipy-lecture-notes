@@ -99,8 +99,8 @@ Most ``scikit-image`` functions take NumPy ``ndarrays`` as arguments ::
     dtype('uint8')
     >>> camera.shape
     (512, 512)
-    >>> from skimage import restoration
-    >>> filtered_camera = restoration.denoise_bilateral(camera)
+    >>> from skimage import filters
+    >>> filtered_camera = filters.gaussian(camera, 1)
     >>> type(filtered_camera)   # doctest: +SKIP
     <type 'numpy.ndarray'>
 
@@ -129,9 +129,7 @@ What's to be found in scikit-image
 
 * Website: http://scikit-image.org/
 
-* Gallery of examples (as in
-  `matplotlib <http://matplotlib.org/gallery.html>`_ or
-  `scikit-learn <http://scikit-learn.org>`_):
+* Gallery of examples:
   http://scikit-image.org/docs/stable/auto_examples/
 
 Different kinds of functions, from boilerplate utility functions to
@@ -221,19 +219,11 @@ Some image processing routines need to work with float arrays, and may
 hence output an array with a different type and the data range from the
 input array ::
 
-    >>> try:
-    ...     from skimage import filters
-    ... except ImportError:
-    ...     from skimage import filter as filters
+    >>> from skimage import filters
     >>> camera_sobel = filters.sobel(camera)
     >>> camera_sobel.max() # doctest: +SKIP 
     0.591502...
 
-.. warning:: 
-
-    In the example above, we use the ``filters`` submodule of scikit-image,
-    that has been renamed from ``filter`` to ``filters`` between versions 0.10
-    and 0.11, in order to avoid a collision with Python's built-in name ``filter``. 
 
 Utility functions are provided in :mod:`skimage` to convert both the
 dtype and the data range, following skimage's conventions:
@@ -299,7 +289,7 @@ Neighbourhood: square (choose size), disk, or more complicated
 Example : horizontal Sobel filter ::
 
     >>> text = data.text()
-    >>> hsobel_text = filters.hsobel(text)
+    >>> hsobel_text = filters.sobel_h(text)
 
 
 Uses the following linear kernel for computing horizontal gradients::
@@ -355,7 +345,7 @@ Default structuring element: 4-connectivity of a pixel ::
 
 **Erosion** = minimum filter. Replace the value of a pixel by the minimal value covered by the structuring element.::
 
-    >>> a = np.zeros((7,7), dtype=np.int)
+    >>> a = np.zeros((7,7), dtype=np.uint8)
     >>> a[1:6, 2:5] = 1
     >>> a
     array([[0, 0, 0, 0, 0, 0, 0],
@@ -364,7 +354,7 @@ Default structuring element: 4-connectivity of a pixel ::
            [0, 0, 1, 1, 1, 0, 0],
            [0, 0, 1, 1, 1, 0, 0],
            [0, 0, 1, 1, 1, 0, 0],
-           [0, 0, 0, 0, 0, 0, 0]])
+           [0, 0, 0, 0, 0, 0, 0]], dtype=uint8)
     >>> morphology.binary_erosion(a, morphology.diamond(1)).astype(np.uint8)
     array([[0, 0, 0, 0, 0, 0, 0],
            [0, 0, 0, 0, 0, 0, 0],
@@ -443,10 +433,10 @@ skeletonization, etc.
         >>> from skimage.morphology import disk
         >>> coins = data.coins()
         >>> coins_zoom = coins[10:80, 300:370]
-        >>> median_coins = filters.rank.median(coins_zoom, disk(1))
+        >>> median_coins = filters.median(coins_zoom, disk(1))
         >>> from skimage import restoration
         >>> tv_coins = restoration.denoise_tv_chambolle(coins_zoom, weight=0.1)
-        >>> gaussian_coins = filters.gaussian_filter(coins, sigma=2)
+        >>> gaussian_coins = filters.gaussian(coins, sigma=2)
 
     .. image:: auto_examples/images/sphx_glr_plot_filter_coins_001.png
         :width: 99%
@@ -505,7 +495,7 @@ Synthetic data::
     >>> im = np.zeros((l, l))
     >>> points = l * np.random.random((2, n ** 2))
     >>> im[(points[0]).astype(np.int), (points[1]).astype(np.int)] = 1
-    >>> im = filters.gaussian_filter(im, sigma=l / (4. * n))
+    >>> im = filters.gaussian(im, sigma=l / (4. * n))
     >>> blobs = im > im.mean()
 
 Label all connected components::
@@ -612,7 +602,7 @@ Example: compute the size and perimeter of the two segmented regions::
 
     >>> properties = measure.regionprops(labels_rw)
     >>> [prop.area for prop in properties]
-    [770.0, 1168.0]
+    [770, 1168]
     >>> [prop.perimeter for prop in properties] # doctest: +ELLIPSIS
     [100.91..., 126.81...]
 
@@ -733,3 +723,12 @@ Points of interest such as corners can then be used to match objects in
 different images, as described in the `plot_matching 
 <http://scikit-image.org/docs/stable/auto_examples/plot_matching.html>`_
 example of scikit-image.
+
+Full code examples
+==================
+
+.. include the gallery. Skip the first line to avoid the "orphan"
+   declaration
+
+.. include:: auto_examples/index.rst
+    :start-line: 1

@@ -45,6 +45,12 @@ Scipy Lecture Notes
         color: #555;
     }
 
+    @media only screen and (max-width: 1080px) and (-webkit-min-device-pixel-ratio: 2), (max-width: 70ex)  {
+        div.sidebar ul {
+            text-indent: 0ex;
+        }
+    }
+
     div.sidebar li {
         margin-top: .5ex;
     }
@@ -57,7 +63,7 @@ Scipy Lecture Notes
 
 .. nice layout in the toc
 
-.. include:: tune_toc.rst 
+.. include:: tune_toc.rst
 
 .. |pdf| unicode:: U+f1c1 .. PDF file
 
@@ -69,13 +75,13 @@ Scipy Lecture Notes
 
     .. sidebar::  Download 
        
-       * |pdf| `PDF, 2 pages per side <./_downloads/ScipyLectures.pdf>`_
+       |pdf| `PDF, 2 pages per side <./_downloads/ScipyLectures.pdf>`_
 
-       * |pdf| `PDF, 1 page per side <./_downloads/ScipyLectures-simple.pdf>`_
+       |pdf| `PDF, 1 page per side <./_downloads/ScipyLectures-simple.pdf>`_
    
-       * |archive| `HTML and example files <https://github.com/scipy-lectures/scipy-lectures.github.com/zipball/master>`_
+       |archive| `HTML and example files <https://github.com/scipy-lectures/scipy-lectures.github.com/zipball/master>`_
      
-       * |github| `Source code (github) <https://github.com/scipy-lectures/scipy-lecture-notes>`_
+       |github| `Source code (github) <https://github.com/scipy-lectures/scipy-lecture-notes>`_
 
 
     Tutorials on the scientific Python ecosystem: a quick introduction to
@@ -95,7 +101,7 @@ Scipy Lecture Notes
 .. rst-class:: tune
 
   .. toctree::
-    :numbered:
+    :numbered: 4
 
     intro/index.rst
     advanced/index.rst
